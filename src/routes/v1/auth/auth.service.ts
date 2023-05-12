@@ -29,19 +29,17 @@ export class AuthService {
     if (userDetails == null) {
       return { status: 401, msg: { msg: ExceptionMessageConstant.INVALID_CREDENTIAL } };
     }
-
+  
     // Check if the given password match with saved password
     const isValid = bcryptjs.compareSync(user.password, userDetails.password);
     if (isValid) {
       // Generate JWT token
       const tokens = await this.getTokens(userDetails.id, userDetails.email);
-      await this.updateRefreshToken(userDetails.id, tokens.refreshToken);
       return {
         status: 200,
         content: {
-          email: user.email,
-          access_token: tokens.accessToken,
-          refresh_token: tokens.refreshToken,
+          user: userDetails,
+          access_token: tokens.accessToken
         },
       };
     } else {
@@ -83,16 +81,10 @@ export class AuthService {
       return { status: 400, content: { msg: 'Invalid content' } };
     }
   }
-  async updateRefreshToken(userId: number, refreshToken: string) {
-    const [hashedRefreshToken] = await Promise.all([bcryptjs.hashSync(refreshToken)]);
-    const updateUserDto = new UpdateUserDto();
-    updateUserDto.hashedRefreshToken = hashedRefreshToken;
-    updateUserDto.refreshToken = refreshToken;
-    await this.usersService.update(userId, updateUserDto);
-  }
+
 
   async getTokens(userId: number, email: string): Promise<TokensDto> {
-    const [accessToken, refreshToken] = await Promise.all([
+    const [accessToken] = await Promise.all([
       this.jwtService.signAsync(
         {
           id: userId,
@@ -101,25 +93,12 @@ export class AuthService {
         {
           privateKey: process.env.PRIVATE_KEY,
           expiresIn: process.env.ACCESS_TOKEN_EXPIRE_DURATION,
-          algorithm: 'RS512',
         },
-      ),
-      this.jwtService.signAsync(
-        {
-          id: userId,
-          email,
-        },
-        {
-          privateKey: process.env.JWT_REFRESH_PRIVATE,
-          expiresIn: process.env.REFRESH_TOKEN_EXPIRE_DURATION,
-          algorithm: 'RS512'
-        },
-      ),
+      )
     ]);
 
     return {
-      accessToken,
-      refreshToken,
+      accessToken
     };
   }
   // async logout(id: number) {
