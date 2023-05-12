@@ -12,7 +12,7 @@ export const dataSourceOptions:DataSourceOptions = {
   ssl: process.env.POSTGRES_SSL === 'true',
   entities: ['dist/**/*.entity.js'],
   // We are using migrations, synchronize should be set to false.
-  synchronize: false,
+  synchronize: true,
   //dropSchema: false,
   // Run migrations automatically,
   // you can disable this if you prefer running migration manually.

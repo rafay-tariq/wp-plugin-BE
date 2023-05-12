@@ -1,0 +1,30 @@
+import { IsNotEmpty, IsOptional, IsString, IsUrl } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+
+export class UpdateStoreDto {
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  websiteName: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsUrl()
+  websiteUrl?: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  consumerKey: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  consumerSecretKey: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  stripeAccount: string;
+
+}

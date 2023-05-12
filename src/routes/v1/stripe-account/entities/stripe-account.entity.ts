@@ -1,29 +1,31 @@
 import { Column, Entity, PrimaryGeneratedColumn, Unique, CreateDateColumn,UpdateDateColumn } from 'typeorm';
 
 
-@Entity('users')
-@Unique(['email'])
-export class User {
+@Entity('stripeAccount')
+export class StripeAccount {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  firstName: string;
+  stripeName: string;
 
   @Column()
-  lastName: string;
+  publicKey: string;
 
   @Column()
-  email: string;
+  secretKey: string;
 
   @Column()
-  password: string;
+  approvedWebsiteUrl: string;
 
-  @Column({ default: false })
-  isVerified: boolean;
+  @Column({nullable: true})
+  productDescription: string;
 
-  @Column({ nullable: true})
-  verificationCode: string;
+  @Column({ default: true })
+  isActiveAccount: boolean;
+
+  @Column({default: false})
+  isLiveAccount: boolean;
 
   @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
   created_at: Date;

@@ -5,6 +5,8 @@ import { AppService } from './app.service';
 import { ScheduleModule } from '@nestjs/schedule';
 import { AuthModule } from '../v1/auth/auth.module';
 import { UsersModule } from '../v1/users/users.module';
+import { StoreModule } from '../v1/store/store.module';
+import { StripeAccountModule } from '../v1/stripe-account/stripe-account.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
@@ -32,6 +34,9 @@ import  { dataSourceOptions } from "../../db";
     ScheduleModule.forRoot(),
     AuthModule,
     UsersModule,
+    StoreModule,
+    StripeAccountModule
+
   ],
   controllers: [AppController],
   providers: [
