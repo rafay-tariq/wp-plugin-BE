@@ -12,8 +12,7 @@ export class JwtAccessTokenStrategy extends PassportStrategy(Strategy, 'jwt') {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: `${process.env.PRIVATE_KEY.replace(/\\\\n/gm, '\\n')}`,
-      algorithms: ['RS512'],
+      secretOrKey: 'secret',
     });
   }
 
@@ -23,6 +22,7 @@ export class JwtAccessTokenStrategy extends PassportStrategy(Strategy, 'jwt') {
    * @returns User
    */
   async validate(payload: any): Promise<User> {
+    console.log("---payload",payload);
     // Accept the JWT and attempt to validate it using the user service
     const user = await this.usersService.findOne(payload.email);
     // If the user is not found, throw an error

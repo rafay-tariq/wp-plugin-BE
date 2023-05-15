@@ -8,7 +8,7 @@ import * as tracing from '@sentry/tracing';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { CustomExceptionFilter } from './exceptions/custom-exception.filter';
 async function bootstrap() {
-  const app: any = await NestFactory.create<NestExpressApplication>(AppModule);
+  const app: any = await NestFactory.create<NestExpressApplication>(AppModule, { cors: true });
   app.useGlobalFilters(new CustomExceptionFilter());
   app.useGlobalPipes(new ValidationPipe());
   app.use(helmet());
@@ -29,8 +29,8 @@ async function bootstrap() {
   });
 
   const config = new DocumentBuilder()
-    .setTitle('nestjs boiler-plate')
-    .setDescription('Boilerplate for nestjs')
+    .setTitle('Wordpress plugin')
+    .setDescription('Dashboard APIs')
     .setVersion('1.0')
     .addTag('api')
     .addBearerAuth({ in: 'header', type: 'http' })

@@ -6,10 +6,12 @@ import { AuthController } from './auth.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '../users/entities/user.entity';
 import { LoggerModule } from '../../../logger/logger.module';
-import { JwtRefreshTokenStrategy } from './strategy/jwt-refresh-token-strategy.service';
+import { JwtAccessTokenStrategy } from './strategy/jwt-access-token-strategy.service';
 @Module({
-  imports: [LoggerModule, JwtModule.register({}), UsersModule, TypeOrmModule.forFeature([User])],
-  providers: [AuthService, JwtRefreshTokenStrategy],
+  imports: [LoggerModule, JwtModule.register({
+    secret: process.env.PRIVATE_KEY,
+  }), UsersModule, TypeOrmModule.forFeature([User])],
+  providers: [AuthService, JwtAccessTokenStrategy],
   exports: [AuthService],
   controllers: [AuthController],
 })

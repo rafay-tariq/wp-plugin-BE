@@ -1,7 +1,5 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ScheduleModule } from '@nestjs/schedule';
 import { AuthModule } from '../v1/auth/auth.module';
 import { UsersModule } from '../v1/users/users.module';
@@ -34,13 +32,11 @@ import  { dataSourceOptions } from "../../db";
     ScheduleModule.forRoot(),
     AuthModule,
     UsersModule,
-    StoreModule,
-    StripeAccountModule
-
+    StripeAccountModule,
+    StoreModule
   ],
-  controllers: [AppController],
+  controllers: [],
   providers: [
-    AppService,
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,

@@ -33,11 +33,4 @@ export class AuthController {
     
     res.status(200).json({success: true});
   }
-  @UseGuards(AuthGuard('jwt-refresh'))
-  @HttpCode(HttpStatus.OK)
-  @Post('refresh')
-  async refreshToken(@Req() req, @Res() res) {
-    const user: any = req.user;
-    res.status(200).json({success: true});
-  }
 }
