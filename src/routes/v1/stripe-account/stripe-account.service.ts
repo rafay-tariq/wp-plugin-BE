@@ -1,26 +1,58 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateStripeAccountDto } from './dto/create-stripe-account.dto';
 import { UpdateStripeAccountDto } from './dto/update-stripe-account.dto';
+import { StripeAccount } from './entities/stripe-account.entity';
 
 @Injectable()
 export class StripeAccountService {
-  create(createStripeAccountDto: CreateStripeAccountDto) {
-    return 'This action adds a new stripeAccount';
+  constructor(
+    @InjectRepository(StripeAccount) private readonly stripeAccountRepository: Repository<StripeAccount>,
+  ) {}
+
+  async create(createStripeAccountDto: CreateStripeAccountDto) {
+    return await this.stripeAccountRepository.save(createStripeAccountDto);
+  }
+  async findAll() {
+    try {
+      return await this.stripeAccountRepository.find();
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+    }
   }
 
-  findAll() {
-    return `This action returns all stripeAccount`;
+  async findOne(id: number) {
+    try {
+      return await this.stripeAccountRepository.findOne({where: { id }});
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} stripeAccount`;
+  async update(id: number, updateStoreDto: UpdateStripeAccountDto): Promise<boolean> {
+    try {
+      const res = await this.stripeAccountRepository.update(id, updateStoreDto);
+      if(res.affected){
+        return true;
+      }else {
+        return false;
+      }
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+    }
   }
 
-  update(id: number, updateStripeAccountDto: UpdateStripeAccountDto) {
-    return `This action updates a #${id} stripeAccount`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} stripeAccount`;
+  async remove(id: number) {
+    try {
+      const res = await this.stripeAccountRepository.delete(id);
+      if(res.affected){
+        return true;
+      }else {
+        return false;
+      }
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+    }
   }
 }

@@ -12,7 +12,11 @@ async function bootstrap() {
   app.useGlobalFilters(new CustomExceptionFilter());
   app.useGlobalPipes(new ValidationPipe());
   app.use(helmet());
-  app.enableCors();
+  app.enableCors({ 
+    origin: '*',
+    methods: ['POST', 'PUT', 'DELETE', 'GET', 'OPTIONS'],
+    optionsSuccessStatus: 200
+  });
   app.setGlobalPrefix('api');
   Sentry.init({
     dsn: process.env.SENTRY_DSN_LINK,

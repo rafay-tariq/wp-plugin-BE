@@ -1,34 +1,36 @@
+import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty } from 'class-validator';
 import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn,UpdateDateColumn } from 'typeorm';
 
 
 @Entity('stripeAccount')
 export class UpdateStripeAccountDto {
 
-  @Column()
+  @IsNotEmpty()
+  @ApiProperty()
   stripeName: string;
 
-  @Column()
+  @IsNotEmpty()
+  @ApiProperty()
   publicKey: string;
 
-  @Column()
+  @IsNotEmpty()
+  @ApiProperty()
   secretKey: string;
 
-  @Column()
+  @IsNotEmpty()
+  @ApiProperty()
   approvedWebsiteUrl: string;
 
-  @Column()
+  @IsNotEmpty()
+  @ApiProperty()
   productDescription: string;
 
-  @Column({ default: true })
+  @IsNotEmpty()
+  @ApiProperty()
   isActiveAccount: boolean;
 
-  @Column()
+  @IsNotEmpty()
+  @ApiProperty()
   isLiveAccount: boolean;
-
-  @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
-  created_at: Date;
-
-  @UpdateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)", onUpdate: "CURRENT_TIMESTAMP(6)" })
-  updated_at: Date;
-
 }
