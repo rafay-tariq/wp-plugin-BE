@@ -24,7 +24,6 @@ export class UpdateStoreDto {
 
   @ApiProperty()
   @IsNotEmpty()
-  @IsString()
-  stripeAccount: string;
+  stripeAccount: number;
 
 }

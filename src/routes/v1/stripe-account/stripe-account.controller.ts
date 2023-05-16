@@ -2,10 +2,11 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { StripeAccountService } from './stripe-account.service';
 import { CreateStripeAccountDto } from './dto/create-stripe-account.dto';
 import { UpdateStripeAccountDto } from './dto/update-stripe-account.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @Controller('stripe-account')
 @ApiTags('Stripe Account')
+@ApiBearerAuth('Authorization')
 export class StripeAccountController {
   constructor(private readonly stripeAccountService: StripeAccountService) {}
 

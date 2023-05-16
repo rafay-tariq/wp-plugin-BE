@@ -8,7 +8,7 @@ import * as tracing from '@sentry/tracing';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { CustomExceptionFilter } from './exceptions/custom-exception.filter';
 async function bootstrap() {
-  const app: any = await NestFactory.create<NestExpressApplication>(AppModule, { cors: true });
+  const app: any = await NestFactory.create<NestExpressApplication>(AppModule);
   app.useGlobalFilters(new CustomExceptionFilter());
   app.useGlobalPipes(new ValidationPipe());
   app.use(helmet());
@@ -33,7 +33,7 @@ async function bootstrap() {
     .setDescription('Dashboard APIs')
     .setVersion('1.0')
     .addTag('api')
-    .addBearerAuth({ in: 'header', type: 'http' })
+    .addBearerAuth({ in: 'header', type: 'http' }, 'Authorization')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

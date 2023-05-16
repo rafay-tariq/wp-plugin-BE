@@ -1,26 +1,64 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger, LoggerService } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { of } from 'rxjs';
+import { Repository } from 'typeorm';
+import { AuthService } from '../auth/auth.service';
 import { CreateStoreDto } from './dto/create-store.dto';
 import { UpdateStoreDto } from './dto/update-store.dto';
+import { Store } from './entities/store.entity';
 
 @Injectable()
 export class StoreService {
-  create(createStoreDto: CreateStoreDto) {
-    return 'This action adds a new store';
+  constructor(
+    @InjectRepository(Store) private readonly storeRepository: Repository<Store>,
+  ) {}
+  async create(createStoreDto: CreateStoreDto): Promise<Store>  {
+    try {
+        return await this.storeRepository.save({...createStoreDto});
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+    }
   }
 
-  findAll() {
-    return `This action returns all store`;
+  async findAll() {
+    try {
+      return await this.storeRepository.find();
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} store`;
+  async findOne(id: number) {
+    try {
+      return await this.storeRepository.findOne({where: { id }});
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+    }
   }
 
-  update(id: number, updateStoreDto: UpdateStoreDto) {
-    return `This action updates a #${id} store`;
+  async update(id: number, updateStoreDto: UpdateStoreDto): Promise<boolean> {
+    try {
+      const res = await this.storeRepository.update(id, updateStoreDto);
+      if(res.affected){
+        return true;
+      }else {
+        return false;
+      }
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} store`;
+  async remove(id: number) {
+    try {
+      const res = await this.storeRepository.delete(id);
+      if(res.affected){
+        return true;
+      }else {
+        return false;
+      }
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+    }
   }
 }

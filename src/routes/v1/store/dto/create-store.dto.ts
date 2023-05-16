@@ -24,7 +24,6 @@ export class CreateStoreDto {
 
   @ApiProperty()
   @IsNotEmpty()
-  @IsString()
-  stripeAccount: string;
+  stripeAccount: number;
 
 }

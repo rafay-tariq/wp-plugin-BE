@@ -11,7 +11,7 @@ export class CustomExceptionFilter implements ExceptionFilter {
       const status = exception.getStatus();
       response.status(status).json({
         statusCode: status,
-        message: exception.message,
+        message: exception.getResponse()['message'],
         path: request.url,
       });
     } else {
