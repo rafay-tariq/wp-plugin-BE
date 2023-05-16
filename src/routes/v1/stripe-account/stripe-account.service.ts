@@ -1,6 +1,7 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { forwardRef, HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { StoreService } from '../store/store.service';
 import { CreateStripeAccountDto } from './dto/create-stripe-account.dto';
 import { UpdateStripeAccountDto } from './dto/update-stripe-account.dto';
 import { StripeAccount } from './entities/stripe-account.entity';
@@ -9,6 +10,8 @@ import { StripeAccount } from './entities/stripe-account.entity';
 export class StripeAccountService {
   constructor(
     @InjectRepository(StripeAccount) private readonly stripeAccountRepository: Repository<StripeAccount>,
+    @Inject(forwardRef(() => StoreService))
+    private readonly storeService: StoreService, 
   ) {}
 
   async create(createStripeAccountDto: CreateStripeAccountDto) {
@@ -45,6 +48,7 @@ export class StripeAccountService {
 
   async remove(id: number) {
     try {
+      
       const res = await this.stripeAccountRepository.delete(id);
       if(res.affected){
         return true;

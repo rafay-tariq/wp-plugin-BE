@@ -19,10 +19,10 @@ export class Store {
   @Column()
   consumerSecretKey: string;
 
-  @Column()
+
   @OneToOne(() => StripeAccount)
   @JoinColumn()
-  stripeAccount: number;
+  stripeAccount: StripeAccount;
 
   @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
   created_at: Date;
