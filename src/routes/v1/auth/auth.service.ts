@@ -27,7 +27,7 @@ export class AuthService {
 
     // Check if user exists
     if (userDetails == null) {
-      return { status: 401, msg: { msg: ExceptionMessageConstant.INVALID_CREDENTIAL } };
+      return { status: 401, content: { msg: ExceptionMessageConstant.INVALID_CREDENTIAL } };
     }
   
     // Check if the given password match with saved password
@@ -44,7 +44,7 @@ export class AuthService {
       };
     } else {
       // Password or email does not match
-      return { status: 401, msg: { msg: ExceptionMessageConstant.INVALID_CREDENTIAL } };
+      return { status: 401, content: { msg: ExceptionMessageConstant.INVALID_CREDENTIAL } };
     }
   }
 
