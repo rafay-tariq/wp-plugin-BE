@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn,UpdateDateColumn, OneToOne, JoinColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn,UpdateDateColumn, OneToOne, JoinColumn, ManyToOne } from 'typeorm';
 import { StripeAccount } from '../../stripe-account/entities/stripe-account.entity';
 
 
@@ -20,9 +20,8 @@ export class Store {
   consumerSecretKey: string;
 
 
-  @OneToOne(() => StripeAccount)
-  @JoinColumn()
-  stripeAccount: StripeAccount;
+  @ManyToOne(() => StripeAccount, (stripe) => stripe.store)
+  stripeAccount: StripeAccount
 
   @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
   created_at: Date;

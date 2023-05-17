@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus } from '@nestjs/common';
 import { StripeAccountService } from './stripe-account.service';
 import { CreateStripeAccountDto } from './dto/create-stripe-account.dto';
 import { UpdateStripeAccountDto } from './dto/update-stripe-account.dto';
@@ -31,7 +31,12 @@ export class StripeAccountController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.stripeAccountService.remove(+id);
+  async remove(@Param('id') id: string) {
+    try {
+      return await this.stripeAccountService.remove(+id);
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+    }
   }
 }
+

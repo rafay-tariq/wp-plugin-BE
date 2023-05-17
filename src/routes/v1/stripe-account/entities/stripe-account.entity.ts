@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn, Unique, CreateDateColumn,UpdateDateColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, Unique, CreateDateColumn,UpdateDateColumn, OneToMany, JoinColumn } from 'typeorm';
+import { Store } from '../../store/entities/store.entity';
 
 
 @Entity('stripeAccount')
@@ -33,4 +34,6 @@ export class StripeAccount {
   @UpdateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)", onUpdate: "CURRENT_TIMESTAMP(6)" })
   updated_at: Date;
 
+  @OneToMany(() => Store, (store) => store.stripeAccount)
+  store: Store[]
 }

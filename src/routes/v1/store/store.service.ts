@@ -18,6 +18,8 @@ export class StoreService {
         const strip = await this.stripeAccountService.findOne(createStoreDto.stripeAccountId);
         if(strip){
           return await this.storeRepository.save({...createStoreDto, stripeAccount: strip});
+        }else{
+          throw new HttpException('Invalid stripe account id!', HttpStatus.BAD_REQUEST);
         }
     } catch (error) {
       throw new HttpException(error, HttpStatus.BAD_REQUEST);
