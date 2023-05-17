@@ -1,7 +1,6 @@
-import { forwardRef, HttpException, HttpStatus, Inject, Injectable, Logger, LoggerService } from '@nestjs/common';
+import { forwardRef, HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { AuthService } from '../auth/auth.service';
 import { StripeAccountService } from '../stripe-account/stripe-account.service';
 import { CreateStoreDto } from './dto/create-store.dto';
 import { UpdateStoreDto } from './dto/update-store.dto';
@@ -36,6 +35,13 @@ export class StoreService {
   async findOne(id: number) {
     try {
       return await this.storeRepository.findOne({where: { id }});
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+    }
+  }
+  async findWhere(where: Object) {
+    try {
+      return await this.storeRepository.findOne({where});
     } catch (error) {
       throw new HttpException(error, HttpStatus.BAD_REQUEST);
     }
