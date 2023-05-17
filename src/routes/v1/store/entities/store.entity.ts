@@ -19,6 +19,8 @@ export class Store {
   @Column()
   consumerSecretKey: string;
 
+  @Column()
+  stripeAccountId: number;
 
   @ManyToOne(() => StripeAccount, (stripe) => stripe.store)
   stripeAccount: StripeAccount

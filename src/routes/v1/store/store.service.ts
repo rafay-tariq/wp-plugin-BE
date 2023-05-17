@@ -1,6 +1,7 @@
 import { forwardRef, HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { StripeAccount } from '../stripe-account/entities/stripe-account.entity';
 import { StripeAccountService } from '../stripe-account/stripe-account.service';
 import { CreateStoreDto } from './dto/create-store.dto';
 import { UpdateStoreDto } from './dto/update-store.dto';
@@ -15,12 +16,7 @@ export class StoreService {
   ) {}
   async create(createStoreDto: CreateStoreDto): Promise<Store>  {
     try {
-        const strip = await this.stripeAccountService.findOne(createStoreDto.stripeAccountId);
-        if(strip){
-          return await this.storeRepository.save({...createStoreDto, stripeAccount: strip});
-        }else{
-          throw new HttpException('Invalid stripe account id!', HttpStatus.BAD_REQUEST);
-        }
+        return await this.storeRepository.save({...createStoreDto});
     } catch (error) {
       throw new HttpException(error, HttpStatus.BAD_REQUEST);
     }
@@ -28,7 +24,7 @@ export class StoreService {
 
   async findAll() {
     try {
-      return await this.storeRepository.find({});
+      return await this.storeRepository.find({relations: ['stripeAccount']});
     } catch (error) {
       throw new HttpException(error, HttpStatus.BAD_REQUEST);
     }
@@ -36,7 +32,7 @@ export class StoreService {
 
   async findOne(id: number) {
     try {
-      return await this.storeRepository.findOne({where: { id }});
+      return await this.storeRepository.findOne({where: { id }, relations: ['stripeAccount']});
     } catch (error) {
       throw new HttpException(error, HttpStatus.BAD_REQUEST);
     }
@@ -49,13 +45,15 @@ export class StoreService {
     }
   }
 
-  async update(id: number, updateStoreDto: UpdateStoreDto): Promise<boolean> {
+  async update(id: number, updateStoreDto: UpdateStoreDto) {
     try {
-      const res = await this.storeRepository.update(id, updateStoreDto);
+      const stripe = new StripeAccount();
+      stripe.id = id;
+      const res = await this.storeRepository.update(id, {...updateStoreDto});
       if(res.affected){
-        return true;
+        return {msg: "Updated successfully."};
       }else {
-        return false;
+        throw new HttpException(Error("Failed to update the account"), HttpStatus.BAD_REQUEST);
       }
     } catch (error) {
       throw new HttpException(error, HttpStatus.BAD_REQUEST);
@@ -66,7 +64,7 @@ export class StoreService {
     try {
       const res = await this.storeRepository.delete(id);
       if(res.affected){
-        return true;
+        return {msg: "Updated successfully."};
       }else {
         return false;
       }
