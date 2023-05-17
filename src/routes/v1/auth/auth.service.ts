@@ -34,7 +34,7 @@ export class AuthService {
     const isValid = bcryptjs.compareSync(user.password, userDetails.password);
     if (isValid) {
       // Generate JWT token
-      const tokens = await this.getTokens(userDetails.id, userDetails.email);
+      const tokens = await this.getTokens(userDetails.id);
       return {
         status: 200,
         content: {
@@ -83,12 +83,11 @@ export class AuthService {
   }
 
 
-  async getTokens(userId: number, email: string): Promise<TokensDto> {
+  async getTokens(userId: number): Promise<TokensDto> {
     const [accessToken] = await Promise.all([
       this.jwtService.signAsync(
         {
-          id: userId,
-          email,
+          id: userId
         },
         {
           privateKey: process.env.PRIVATE_KEY,
@@ -101,16 +100,11 @@ export class AuthService {
       accessToken
     };
   }
-  // async logout(id: number) {
-  //   const user = await this.usersService.findById(id);
-  //   if (user) {
-  //     const updateUserDto = new UpdateUserDto();
-  //     updateUserDto.hashedRefreshToken = null;
-  //     await this.usersService.update(user.id, updateUserDto);
-  //     return {
-  //       status: 200,
-  //       content: 'Logout successfully',
-  //     };
-  //   }
-  // }
+  async update(id: number, updateUserDto: UpdateUserDto){
+    if(updateUserDto.password){
+      updateUserDto.password = bcryptjs.hashSync(updateUserDto.password, 10);
+    }
+    return await this.usersService.update(id, updateUserDto);
+
+  }
 }

@@ -24,7 +24,7 @@ export class JwtAccessTokenStrategy extends PassportStrategy(Strategy, 'jwt') {
   async validate(payload: any): Promise<User> {
     console.log("---payload",payload);
     // Accept the JWT and attempt to validate it using the user service
-    const user = await this.usersService.findOne(payload.email);
+    const user = await this.usersService.findById(payload.id);
     // If the user is not found, throw an error
     if (!user) {
       throw new HttpException(ExceptionMessageConstant.INVALID_TOKEN, HttpStatus.UNAUTHORIZED);

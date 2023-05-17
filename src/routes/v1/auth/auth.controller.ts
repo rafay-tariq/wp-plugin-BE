@@ -4,8 +4,9 @@ import { LoginUserDto } from '../users/dto/login-user.dto';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { NoAuth } from './strategy/no-auth.guard';
-import { AuthGuard } from '@nestjs/passport';
-@ApiBearerAuth()
+import { UpdateUserDto } from '../users/dto/update-user.dto';
+
+
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
@@ -21,16 +22,14 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @NoAuth()
   @Post('register')
-  async register(@Req() req, @Res() res, @Body() body: CreateUserDto) {
+  async register(@Res() res, @Body() body: CreateUserDto) {
     const auth = await this.authService.register(body);
     res.status(auth.status).json(auth.content);
   }
-  @UseGuards(AuthGuard('jwt'))
-  @HttpCode(HttpStatus.OK)
-  @Post('logout')
-  async logout(@Req() req, @Res() res) {
-    const id: number = req.user.id;
-    
-    res.status(200).json({success: true});
+
+  @Post('update')
+  @ApiBearerAuth('Authorization')
+  async update(@Req() req ,@Body() updateUserDto: UpdateUserDto){
+    return await this.authService.update(req.user.id, updateUserDto);
   }
 }
