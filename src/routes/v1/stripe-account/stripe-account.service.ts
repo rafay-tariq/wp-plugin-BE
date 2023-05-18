@@ -48,7 +48,7 @@ export class StripeAccountService {
 
   async remove(id: number) {
     try {
-      const store = await this.storeService.findWhere({"stripeAccount.id": id});
+      const store = await this.storeService.findWhere({stripeAccountId: id});
       if(store){
         throw new HttpException('Stripe account is already linked with some store', HttpStatus.BAD_REQUEST);
       }
