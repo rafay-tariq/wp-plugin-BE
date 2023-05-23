@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from '@nestjs/common';
 import { StoreService } from './store.service';
 import { CreateStoreDto } from './dto/create-store.dto';
 import { UpdateStoreDto } from './dto/update-store.dto';
@@ -11,8 +11,8 @@ export class StoreController {
   constructor(private readonly storeService: StoreService) {}
 
   @Post()
-  create(@Body() createStoreDto: CreateStoreDto) {
-    return this.storeService.create(createStoreDto);
+  create(@Req() req, @Body() createStoreDto: CreateStoreDto) {
+    return this.storeService.create(createStoreDto, req.user.id);
   }
 
   @Get()

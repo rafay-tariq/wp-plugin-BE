@@ -1,5 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn,UpdateDateColumn, OneToOne, JoinColumn, ManyToOne } from 'typeorm';
 import { StripeAccount } from '../../stripe-account/entities/stripe-account.entity';
+import { User } from '../../users/entities/user.entity';
 
 
 @Entity('store')
@@ -21,6 +22,12 @@ export class Store {
 
   @Column()
   stripeAccountId: number;
+
+  @Column()
+  userId: number;
+
+  @ManyToOne(() => User, (user) => user.store)
+  user: User
 
   @ManyToOne(() => StripeAccount, (stripe) => stripe.store)
   stripeAccount: StripeAccount

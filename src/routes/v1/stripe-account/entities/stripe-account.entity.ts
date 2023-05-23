@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn, Unique, CreateDateColumn,UpdateDateColumn, OneToMany, JoinColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, Unique, CreateDateColumn,UpdateDateColumn, OneToMany, JoinColumn, ManyToOne } from 'typeorm';
 import { Store } from '../../store/entities/store.entity';
+import { User } from '../../users/entities/user.entity';
 
 
 @Entity('stripeAccount')
@@ -27,6 +28,12 @@ export class StripeAccount {
 
   @Column({default: false})
   isLiveAccount: boolean;
+
+  @Column()
+  userId: number;
+
+  @ManyToOne(() => User, (user) => user.stripeAccount)
+  user: User;
 
   @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
   created_at: Date;

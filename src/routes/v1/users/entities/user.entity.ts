@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn, Unique, CreateDateColumn,UpdateDateColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, Unique, CreateDateColumn,UpdateDateColumn, OneToMany } from 'typeorm';
+import { Store } from '../../store/entities/store.entity';
+import { StripeAccount } from '../../stripe-account/entities/stripe-account.entity';
 
 
 @Entity('users')
@@ -24,6 +26,12 @@ export class User {
 
   @Column({ nullable: true, select: false})
   verificationCode: string;
+
+  @OneToMany(() => Store, (store) => store.user)
+  store: Store[]
+
+  @OneToMany(() => StripeAccount, (stripe) => stripe.user)
+  stripeAccount: Store[]
 
   @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
   created_at: Date;

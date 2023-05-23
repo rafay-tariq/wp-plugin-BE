@@ -14,9 +14,9 @@ export class StoreService {
     @Inject(forwardRef(() => StripeAccountService))
     private readonly stripeAccountService: StripeAccountService,
   ) {}
-  async create(createStoreDto: CreateStoreDto): Promise<Store>  {
+  async create(createStoreDto: CreateStoreDto, userId: number): Promise<Store>  {
     try {
-        return await this.storeRepository.save({...createStoreDto});
+        return await this.storeRepository.save({...createStoreDto, userId});
     } catch (error) {
       throw new HttpException(error, HttpStatus.BAD_REQUEST);
     }

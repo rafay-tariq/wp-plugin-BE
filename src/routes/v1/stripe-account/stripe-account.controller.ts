@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus, Query, Req } from '@nestjs/common';
 import { StripeAccountService } from './stripe-account.service';
 import { CreateStripeAccountDto } from './dto/create-stripe-account.dto';
 import { UpdateStripeAccountDto } from './dto/update-stripe-account.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { GetTransactionDto } from './dto/get-transactions.dto';
 
 @Controller('stripe-account')
 @ApiTags('Stripe Account')
@@ -11,8 +12,8 @@ export class StripeAccountController {
   constructor(private readonly stripeAccountService: StripeAccountService) {}
 
   @Post()
-  create(@Body() createStripeAccountDto: CreateStripeAccountDto) {
-    return this.stripeAccountService.create(createStripeAccountDto);
+  create(@Req() req, @Body() createStripeAccountDto: CreateStripeAccountDto) {
+    return this.stripeAccountService.create(createStripeAccountDto, req.user.id);
   }
 
   @Get()
@@ -38,5 +39,12 @@ export class StripeAccountController {
       throw new HttpException(error, HttpStatus.BAD_REQUEST);
     }
   }
+
+  @Get('transactions/all')
+  async getStripeTransactions(@Query() getTransactionsDto: GetTransactionDto) {
+    console.log("----getTransactionsDto",getTransactionsDto)
+    return await this.stripeAccountService.getStripeTransactions(getTransactionsDto);
+  }
+
 }
 
