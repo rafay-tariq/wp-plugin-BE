@@ -15,6 +15,7 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtAccessTokenStrategy } from '../v1/auth/strategy/jwt-access-token-strategy.service';
 import { JwtAuthGuard } from '../v1/auth/strategy/jwt-auth-guard';
 import  { dataSourceOptions } from "../../db";
+import { PackagesModule } from '../v1/packages/packages.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -33,7 +34,8 @@ import  { dataSourceOptions } from "../../db";
     AuthModule,
     UsersModule,
     StripeAccountModule,
-    StoreModule
+    StoreModule,
+    PackagesModule,
   ],
   controllers: [],
   providers: [
