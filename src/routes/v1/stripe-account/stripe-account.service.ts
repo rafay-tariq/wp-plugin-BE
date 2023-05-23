@@ -32,10 +32,9 @@ export class StripeAccountService {
       const getStripeData =  await firstValueFrom(this.httpService.get(url, { headers: headersRequest }).pipe(map((res) => {
         return res.data;
       })));
-      console.log('---getStripeData',getStripeData);
       return {getStripeData};
     } catch (error) {
-      console.log("--error",error);
+      console.log("--error",error)
       throw new HttpException(error, HttpStatus.BAD_REQUEST);
     }
   }

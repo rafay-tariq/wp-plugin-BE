@@ -1,5 +1,6 @@
 import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { UserRole, UserStatus } from "../../../../../constant/exception-message.constant";
 
 export class UpdateUserDto {
   @ApiProperty()
@@ -21,5 +22,15 @@ export class UpdateUserDto {
   @IsOptional()
   @IsString()
   password: string;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  status: UserStatus;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  userRole: UserRole;
 
 }
