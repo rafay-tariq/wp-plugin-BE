@@ -1,6 +1,7 @@
 import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { UserRole, UserStatus } from "../../../../../constant/exception-message.constant";
+import { UserRole } from "../../../../routes/v1/users/enums/role.enum";
+import { UserStatus } from "../../../../routes/v1/users/enums/userStatus.enum";
 
 export class UpdateUserDto {
   @ApiProperty()
@@ -31,6 +32,6 @@ export class UpdateUserDto {
   @ApiProperty()
   @IsOptional()
   @IsString()
-  userRole: UserRole;
+  role: UserRole;
 
 }

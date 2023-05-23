@@ -1,7 +1,8 @@
 import { Column, Entity, PrimaryGeneratedColumn, Unique, CreateDateColumn,UpdateDateColumn, OneToMany } from 'typeorm';
 import { Store } from '../../store/entities/store.entity';
 import { StripeAccount } from '../../stripe-account/entities/stripe-account.entity';
-import { UserRole, UserStatus } from "../../../../../constant/exception-message.constant";
+import { UserRole } from "../../../../routes/v1/users/enums/role.enum";
+import { UserStatus } from "../../../../routes/v1/users/enums/userStatus.enum";
 
 @Entity('users')
 @Unique(['email'])
@@ -29,7 +30,7 @@ export class User {
     enum: UserRole,
     default: UserRole.USER
   })
-  userRole: UserRole;
+  role: UserRole;
 
   @Column({
     type: "enum",

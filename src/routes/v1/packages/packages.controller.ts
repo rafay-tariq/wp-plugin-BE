@@ -3,10 +3,13 @@ import { PackagesService } from './packages.service';
 import { CreatePackageDto } from './dto/create-package.dto';
 import { UpdatePackageDto } from './dto/update-package.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { UserRole } from '../../../routes/v1/users/enums/role.enum';
+import { Roles } from 'src/decorators/custom.decorator';
 
 @Controller('packages')
 @ApiTags('Packages')
 @ApiBearerAuth('Authorization')
+@Roles(UserRole.ADMIN)
 export class PackagesController {
   constructor(private readonly packagesService: PackagesService) {}
 
