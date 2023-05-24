@@ -1,5 +1,6 @@
 import { Transform } from 'class-transformer';
-import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn,UpdateDateColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn,UpdateDateColumn, OneToMany } from 'typeorm';
+import { UserPackage } from '../../user-package/entities/user-package.entity';
 
 
 @Entity('package')
@@ -25,6 +26,9 @@ export class Package {
   @Column()
   maxStores: number;
 
+
+  @OneToMany(() => UserPackage, (userPackage) => userPackage.package)
+  userPackage: UserPackage[]
   
   @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
   created_at: Date;

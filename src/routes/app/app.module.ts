@@ -16,6 +16,7 @@ import { JwtAccessTokenStrategy } from '../v1/auth/strategy/jwt-access-token-str
 import { JwtAuthGuard } from '../v1/auth/strategy/jwt-auth-guard';
 import  { dataSourceOptions } from "../../db";
 import { PackagesModule } from '../v1/packages/packages.module';
+import { UserPackageModule } from '../v1/user-package/user-package.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -36,6 +37,7 @@ import { PackagesModule } from '../v1/packages/packages.module';
     StripeAccountModule,
     StoreModule,
     PackagesModule,
+    UserPackageModule,
   ],
   controllers: [],
   providers: [

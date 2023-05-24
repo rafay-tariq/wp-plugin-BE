@@ -3,6 +3,7 @@ import { Store } from '../../store/entities/store.entity';
 import { StripeAccount } from '../../stripe-account/entities/stripe-account.entity';
 import { UserRole } from "../../../../routes/v1/users/enums/role.enum";
 import { UserStatus } from "../../../../routes/v1/users/enums/userStatus.enum";
+import { UserPackage } from '../../user-package/entities/user-package.entity';
 
 @Entity('users')
 @Unique(['email'])
@@ -50,6 +51,9 @@ export class User {
 
   @OneToMany(() => StripeAccount, (stripe) => stripe.user)
   stripeAccount: Store[]
+
+  @OneToMany(() => UserPackage, (userPackage) => userPackage.user)
+  userPackage: Store[]
 
   @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP(6)" })
   created_at: Date;
