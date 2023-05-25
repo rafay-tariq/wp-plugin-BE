@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable, Logger } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcryptjs from 'bcryptjs';
 import { validate } from 'class-validator';
@@ -9,11 +9,14 @@ import { CreateUserDto } from '../users/dto/create-user.dto';
 import { LoginUserDto } from '../users/dto/login-user.dto';
 import { TokensDto } from './dto/tokens.dto';
 import { ExceptionMessageConstant } from "../../../../constant/exception-message.constant";
+import { InjectStripe } from 'nestjs-stripe';
+import Stripe from 'stripe';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly logger: LoggerService = new Logger(AuthService.name),
+    @InjectStripe() private readonly stripeClient: Stripe,
     private jwtService: JwtService,
     private usersService: UsersService,
   ) {}
@@ -68,7 +71,8 @@ export class AuthService {
       }
     });
     if (isOk) {
-      await this.usersService.create(userDTO).catch((error) => {
+      const stripeCustomerId =  await this.createStripeCustomer(body);
+      await this.usersService.create(userDTO, stripeCustomerId).catch((error) => {
         this.logger.debug(error.message);
         isOk = false;
       });
@@ -82,6 +86,14 @@ export class AuthService {
     }
   }
 
+  async createStripeCustomer(user: CreateUserDto){
+    try {
+      const createCustomer = await this.stripeClient.customers.create({name: user.firstName});
+      return createCustomer.id;
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+    }
+  }
 
   async getTokens(userId: number): Promise<TokensDto> {
     const [accessToken] = await Promise.all([

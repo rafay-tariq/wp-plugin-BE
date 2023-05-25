@@ -17,8 +17,14 @@ import { JwtAuthGuard } from '../v1/auth/strategy/jwt-auth-guard';
 import  { dataSourceOptions } from "../../db";
 import { PackagesModule } from '../v1/packages/packages.module';
 import { UserPackageModule } from '../v1/user-package/user-package.module';
+import { StripeModule } from 'nestjs-stripe';
+
 @Module({
   imports: [
+    StripeModule.forRoot({
+      apiKey: process.env.STRIPE_SECRET_KEY,
+      apiVersion: '2020-08-27',
+    }),
     ConfigModule.forRoot({
       isGlobal: true,
     }),

@@ -46,6 +46,9 @@ export class User {
   @Column({ nullable: true})
   profileImage: string;
 
+  @Column()
+  stripeCustomerId: string;
+
   @OneToMany(() => Store, (store) => store.user)
   store: Store[]
 

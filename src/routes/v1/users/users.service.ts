@@ -12,14 +12,14 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UsersService {
   constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {}
 
-  create(createUserDto: CreateUserDto): Promise<User> {
+  create(createUserDto: CreateUserDto, stripeCustomerId: string): Promise<User> {
     const user = new User();
 
     user.firstName = createUserDto.firstName;
     user.lastName = createUserDto.lastName;
     user.email = createUserDto.email;
     user.password = createUserDto.password;
-    return this.userRepository.save(user);
+    return this.userRepository.save({...user, stripeCustomerId});
   }
 
   async findAll(): Promise<User[]> {
