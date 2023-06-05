@@ -21,7 +21,7 @@ export class UserPackage {
   userId: number;
 
   @Column()
-  stripeTransactionId: number;
+  stripeChargeId: string;
 
   @ManyToOne(() => User, (user) => user.stripeAccount)
   user: User;

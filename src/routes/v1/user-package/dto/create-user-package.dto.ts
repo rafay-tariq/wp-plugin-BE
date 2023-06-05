@@ -20,4 +20,8 @@ export class CreateUserPackageDto {
   @IsNotEmpty()
   packageId: number;
 
+  @ApiProperty()
+  @IsNotEmpty()
+  stripeChargeId: string;
+
 }
