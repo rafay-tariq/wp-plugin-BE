@@ -22,17 +22,17 @@ export class StoreService {
     }
   }
 
-  async findAll() {
+  async findAll(where: Object) {
     try {
-      return await this.storeRepository.find({relations: ['stripeAccount']});
+      return await this.storeRepository.find({where , relations: ['stripeAccount']});
     } catch (error) {
       throw new HttpException(error, HttpStatus.BAD_REQUEST);
     }
   }
 
-  async findOne(id: number) {
+  async findOne(where: object) {
     try {
-      return await this.storeRepository.findOne({where: { id }, relations: ['stripeAccount']});
+      return await this.storeRepository.findOne({where, relations: ['stripeAccount']});
     } catch (error) {
       throw new HttpException(error, HttpStatus.BAD_REQUEST);
     }
@@ -45,11 +45,9 @@ export class StoreService {
     }
   }
 
-  async update(id: number, updateStoreDto: UpdateStoreDto) {
+  async update(where: object, updateStoreDto: UpdateStoreDto) {
     try {
-      const stripe = new StripeAccount();
-      stripe.id = id;
-      const res = await this.storeRepository.update(id, {...updateStoreDto});
+      const res = await this.storeRepository.update(where, {...updateStoreDto});
       if(res.affected){
         return {msg: "Updated successfully."};
       }else {
@@ -60,9 +58,9 @@ export class StoreService {
     }
   }
 
-  async remove(id: number) {
+  async remove(where: object) {
     try {
-      const res = await this.storeRepository.delete(id);
+      const res = await this.storeRepository.delete(where);
       if(res.affected){
         return {msg: "Updated successfully."};
       }else {

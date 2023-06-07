@@ -3,6 +3,7 @@ import { StoreService } from './store.service';
 import { CreateStoreDto } from './dto/create-store.dto';
 import { UpdateStoreDto } from './dto/update-store.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { UserRole } from '../users/enums/role.enum';
 
 @Controller('store')
 @ApiTags('Store')
@@ -16,22 +17,42 @@ export class StoreController {
   }
 
   @Get()
-  findAll() {
-    return this.storeService.findAll();
+  findAll(@Req() req) {
+    let where = { userId: req.user.id  };
+
+    if(req.user.role == UserRole.ADMIN){
+      delete where.userId;
+    }
+    return this.storeService.findAll(where);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.storeService.findOne(+id);
+  findOne(@Req() req, @Param('id') id: string) {
+    let where = { id , userId: req.user.id};
+
+    if(req.user.role == UserRole.ADMIN){
+      delete where.userId;
+    }
+    return this.storeService.findOne(where);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateStoreDto: UpdateStoreDto) {
-    return this.storeService.update(+id, updateStoreDto);
+  update(@Req() req, @Param('id') id: string, @Body() updateStoreDto: UpdateStoreDto) {
+    let where = { id , userId: req.user.id};
+
+    if(req.user.role == UserRole.ADMIN){
+      delete where.userId;
+    }
+    return this.storeService.update(where, updateStoreDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.storeService.remove(+id);
+  remove(@Req() req, @Param('id') id: string) {
+     let where = { id , userId: req.user.id};
+
+    if(req.user.role == UserRole.ADMIN){
+      delete where.userId;
+    }
+    return this.storeService.remove(where);
   }
 }
